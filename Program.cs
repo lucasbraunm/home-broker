@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading;
+using System.Net.Mail;
+using System.Net;
 
 namespace HomeBroker
 {
@@ -14,7 +16,17 @@ namespace HomeBroker
 
       while (true)
       {
-        string price = getPriceStockAPI(stock);
+        string priceStr = getPriceStockAPI(stock);
+        if (priceStr == "")
+        {
+          Console.WriteLine($"Não foi possível adquirir preço do ativo {stock}");
+          return;
+        }
+        double price = convertPrice(priceStr);
+
+        string recommendation = StockRecommendation(max, min, price);
+        MailWithRecommendation(recommendation, stock, price);
+
         Thread.Sleep(15000);
       }
     }
@@ -61,7 +73,82 @@ namespace HomeBroker
       }
     }
 
-    static string GetSettingValue(string paramName)
+    static string StockRecommendation(double max, double min, double price)
+    {
+      if (price > max)
+      {
+        return "Vender";
+      }
+      else if (price < min)
+      {
+        return "Comprar";
+      }
+      else
+      {
+        return "Manter";
+      }
+    }
+
+    static void MailWithRecommendation(string recommendation, string stock, double price)
+    {
+      try
+      {
+        MailMessage message = GetMailMessage(recommendation, stock, price);
+
+        if (message.Subject != "")
+        {
+          Console.WriteLine(message.Subject);
+          string server = GetSettingValue("SMTPServer");
+          int host = Convert.ToInt32(GetSettingValue("SMTPHost"));
+          string user = GetSettingValue("SMTPUser");
+          string password = GetSettingValue("SMTPPassword");
+
+          SmtpClient smtp = new SmtpClient(server, host)
+          {
+            Credentials = new NetworkCredential(user, password),
+            EnableSsl = true
+          };
+          smtp.Send(message);
+          Console.WriteLine("Email enviado");
+        }
+        else
+        {
+          Console.WriteLine("Email não enviado");
+        }
+      }
+      catch (Exception error)
+      {
+        Console.WriteLine(error.Message);
+        throw;
+      }
+    }
+
+    static MailMessage GetMailMessage(string recommendation, string stock, double price)
+    {
+      MailAddress from = new MailAddress(GetSettingValue("emailFrom"));
+      MailAddress to = new MailAddress(GetSettingValue("emailTo"));
+      MailMessage message = new MailMessage(from, to);
+
+      if (recommendation == "Vender")
+      {
+        message.Subject = recommendation;
+        message.Body = $"É recomendada a venda do ativo {stock} no preço {price}";
+      }
+      else if (recommendation == "Comprar")
+      {
+        message.Subject = recommendation;
+        message.Body = $"É recomendada a compra do ativo {stock} no preço {price}";
+      }
+      else
+      {
+        message.Subject = "";
+        message.Body = "";
+      }
+
+      return message;
+    }
+
+    private static string GetSettingValue(string paramName)
     {
       try
       {

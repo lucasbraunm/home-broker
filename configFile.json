@@ -1,3 +1,9 @@
 {
-  "APIKey": "a4d71b26"
+  "APIKey": "a4d71b26",
+  "SMTPServer": "smtp.mailtrap.io",
+  "SMTPHost": "2525",
+  "emailTo": "lubraunm@gmail.com",
+  "emailFrom": "lucasbraun2001@gmail.com",
+  "SMTPUser": "bac4847653ce72",
+  "SMTPPassword": "ae5b88da06ac5f"
 }
