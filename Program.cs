@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Net.Mail;
 using System.Net;
+using System.Web;
 
 namespace HomeBroker
 {
@@ -27,7 +28,8 @@ namespace HomeBroker
         string recommendation = StockRecommendation(max, min, price);
         MailWithRecommendation(recommendation, stock, price);
 
-        Thread.Sleep(15000);
+        int timeInterval = Convert.ToInt32(GetSettingValue("timeIntervalInSeconds"));
+        Thread.Sleep(timeInterval * 1000);
       }
     }
 
@@ -77,15 +79,15 @@ namespace HomeBroker
     {
       if (price > max)
       {
-        return "Vender";
+        return "venda";
       }
       else if (price < min)
       {
-        return "Comprar";
+        return "compra";
       }
       else
       {
-        return "Manter";
+        return "manter";
       }
     }
 
@@ -94,6 +96,8 @@ namespace HomeBroker
       try
       {
         MailMessage message = GetMailMessage(recommendation, stock, price);
+        message.IsBodyHtml = true;
+
 
         if (message.Subject != "")
         {
@@ -129,15 +133,15 @@ namespace HomeBroker
       MailAddress to = new MailAddress(GetSettingValue("emailTo"));
       MailMessage message = new MailMessage(from, to);
 
-      if (recommendation == "Vender")
+      if (recommendation == "venda" || recommendation == "compra")
       {
-        message.Subject = recommendation;
-        message.Body = $"É recomendada a venda do ativo {stock} no preço {price}";
-      }
-      else if (recommendation == "Comprar")
-      {
-        message.Subject = recommendation;
-        message.Body = $"É recomendada a compra do ativo {stock} no preço {price}";
+        string Body = System.IO.File.ReadAllText("templates/mail-template.html");
+        Body = Body.Replace("#Recomendacao#", recommendation);
+        Body = Body.Replace("#NomeAtivo#", stock);
+        Body = Body.Replace("#PrecoAtivo#", Convert.ToString(price));
+
+        message.Subject = $"HomeBroker: Recomendação de {recommendation} de ativo";
+        message.Body = Body;
       }
       else
       {

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HomeBroker Email</title>
+    <style>
+      body {
+        background-color: #f6f6f6;
+        font-family: sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%; 
+      }
+      .container {
+        display: block;
+        margin: 0 auto !important;
+        /* makes it centered */
+        max-width: 640px;
+        padding: 10px;
+        width: 90%; 
+      }
+      .content {
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto;
+        max-width: 580px;
+        padding: 10px; 
+      }
+      .main {
+        background: #ffffff;
+        border-radius: 3px;
+        width: 100%; 
+      }
+      .wrapper {
+        box-sizing: border-box;
+        padding: 20px;
+      }
+      h2 {
+      	margin: 0;
+      }
+      .content-block {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .footer {
+        clear: both;
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      .footer td,
+      .footer a {
+        color: #999999;
+        font-size: 12px;
+        text-align: center; 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+        <table role="presentation" class="main">
+          <tr>
+            <td class="wrapper">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <h2><b>Recomendação de #Recomendacao#</b></h2>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p>O serviço HomeBroker recomenda a compra do ativo #NomeAtivo# pelo preço R$ #PrecoAtivo#.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+          <div class="footer">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="content-block">
+                  Serviço de cotação de ativos HomeBroker by 
+                  <a href="https://github.com/lucasbraunm/home-broker">
+                      github.com/lucasbraunm
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
