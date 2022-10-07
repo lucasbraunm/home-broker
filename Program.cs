@@ -58,7 +58,7 @@ namespace HomeBroker
             var result = JsonDocument.Parse(json).RootElement.GetProperty("results").GetProperty(stock);
             price = result.GetProperty("price").ToString();
 
-            Console.WriteLine($"Ativo {stock}, consultado {price}");
+            Console.WriteLine($"Ativo {stock} consultado, preço atual é de R$ {price}");
           }
           else
           {
@@ -113,7 +113,7 @@ namespace HomeBroker
             EnableSsl = true
           };
           smtp.Send(message);
-          Console.WriteLine("Email enviado");
+          Console.WriteLine("Email enviado com sucesso");
         }
         else
         {
