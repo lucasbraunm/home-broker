@@ -1,5 +1,5 @@
 {
-  "timeIntervalInSeconds": "15",
+  "timeIntervalInSeconds": "300",
   "APIKey": "a4d71b26",
   "SMTPServer": "smtp.mailtrap.io",
   "SMTPHost": "2525",
